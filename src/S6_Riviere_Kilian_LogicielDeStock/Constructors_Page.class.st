@@ -22,7 +22,9 @@ Class {
 		'avignonButton',
 		'saintetienneButton',
 		'siteButtons',
-		'stock'
+		'stock',
+		'listButton',
+		'liste'
 	],
 	#category : #'S6_Riviere_Kilian_LogicielDeStock'
 }
@@ -82,6 +84,7 @@ Constructors_Page >> connectPresenters [
 	self submitButton action: [ self submit ].
 	self restoreButton action: [ self restore ].
 	self cancelButton action: [ self cancel ].
+	self listButton action: [ self list ]
 ]
 
 { #category : #accessing }
@@ -109,24 +112,17 @@ Constructors_Page >> date_livraisonDateImput: anObject [
 Constructors_Page >> defaultLayout [
 	"ajout des différentes cases pour chaque renseignement"
 	^ SpBoxLayout newTopToBottom 
-		add: (SpBoxLayout newLeftToRight
-			spacing: 1;
-			add: (SpGridLayout build: [ :builder |
-				builder
-					add: 'Référence du produit :'; add: reference_produitTextInput; nextRow]);
-			add: (SpGridLayout build: [ :builder |
-				builder
-					add: 'Numéro de lot :'; add: numero_lotNumberImput; nextRow]);
-			yourself);
 		add: (SpGridLayout build: [ :builder |
 				builder
+					add: 'Référence du produit :'; add: reference_produitTextInput; nextRow;
+					add: 'Numéro de lot :'; add: numero_lotNumberImput; nextRow;
 					add: 'Nom du produit :'; add: nom_produitTextImput ; nextRow;
 					add: 'Date de livraison :'; add: date_livraisonDateImput ; nextRow;
 					add: 'Marque :'; add: marqueTextImput; nextRow;
 					add: 'Nombre d unités du lot'; add: nombre_unitesNumberImput; nextRow;
 					add: 'Coût unitaire'; add: cout_uniteNumberImput; nextRow;
 					add: 'Taux de marge'; add: taux_margeNumberImput; nextRow;
-					add: 'Total'; add: totalCalculImput ; nextRow;
+					"add: 'Total'; add: totalCalculImput ; nextRow;"
 		add: 'Site de production:'; add: (SpBoxLayout newVertical 
 					add: annecyButton;
 					add: geneveButton;
@@ -140,6 +136,7 @@ Constructors_Page >> defaultLayout [
 			add: submitButton;
 			add: restoreButton;
 			add: cancelButton;
+			add: listButton;
 			yourself)
 	
 		expand: false;
@@ -160,7 +157,7 @@ Constructors_Page >> fillFormWithWorkingModel [
 	self nombre_unitesNumberImput text: aModel nombre_unites asString.
 	self cout_uniteNumberImput text: aModel cout_unite asString.
 	self taux_margeNumberImput text: aModel taux_marge asString.
-	self totalCalculImput: aModel total asString.
+	"self totalCalculImput: aModel total asString."
 	(siteButtons at: aModel site) state: true.
 	"self itemsInput selectItems: self workingModel selectedItems"
 ]
@@ -183,7 +180,6 @@ Constructors_Page >> fillModelWithFormContent [
 	
 	
 	"self workingModel selectedItems: self itemsInput selectedItems."
-
 ]
 
 { #category : #accessing }
@@ -194,6 +190,7 @@ Constructors_Page >> geneveButton [
 { #category : #initialization }
 Constructors_Page >> initializePresenters [
 	"instalation des différentes limitations selon les boutons"
+
 	
 	"Référence du produit"
 	reference_produitTextInput  := self newTextInput.
@@ -244,9 +241,8 @@ Constructors_Page >> initializePresenters [
 		maximum: 2. 
 		
 	"Total"
-	totalCalculImput := self newTextInput
-		editable: false.
-	totalCalculImput placeholder: '0'.
+	"totalCalculImput := self newTextInput
+		editable: false."
 	
 	
 	"Bouton de site"
@@ -267,6 +263,7 @@ Constructors_Page >> initializePresenters [
 	submitButton  := self newButton label: 'Ajouter'.
 	restoreButton := self newButton label: 'Réinitialiser'.
 	cancelButton := self newButton label: 'Fermer & Annuler'.
+	listButton := self newButton label: 'Afficher la liste'.
 	
 	stock := Stock new.
 	Transcript show: 'La liste a été crée !'
@@ -278,7 +275,7 @@ Constructors_Page >> initializePresenters [
 Constructors_Page >> initializeWindow: aWindowPresenter [
 	"Cela permet d'ouvrir la fenêtre avec des options pré-définie"
 	aWindowPresenter
-		initialExtent: 650@800.
+		initialExtent: 650@600.
 	aWindowPresenter title: 'Formulaire de stock'.
 ]
 
@@ -290,6 +287,68 @@ Constructors_Page >> itemsInput [
 { #category : #accessing }
 Constructors_Page >> itemsInput: anObject [
 	itemsInput := anObject.
+]
+
+{ #category : #'private - accessing' }
+Constructors_Page >> json [
+	"|jsonRef stream fichier string |
+	
+	fichier := 'test.json' asFileReference.
+	
+	fichier exists. ""Vérifier si ça existe""
+
+	fichier extension.
+	
+	jsonRef := Dictionary new
+			at: 'Date' put: (Date today) asString;
+			at: 'Référence' put: (self reference_produitTextInput text) asString;
+			at: 'Lot' put: (self numero_lotNumberImput text) asString;
+			at: 'Nom' put: (self nom_produitTextImput text) asString;
+			at: 'Date de livraison' put: (self date_livraisonDateImput date) asString;
+			at: 'Marque' put: (self marqueTextImput text) asString;
+			at: 'Nombre d unités' put: (self nombre_unitesNumberImput text)asString;
+			at: 'Coût unitaire' put: (self cout_uniteNumberImput text)asString;
+			at: 'Taux de marge' put: (self taux_margeNumberImput text)asString;
+			at: 'Total' put: (self totalCalculImput)asString;
+			at: 'Site' put: ((annecyButton state) ifTrue: ('Annecy')
+					ifFalse: ((geneveButton state) ifTrue: ('Genève')
+					ifFalse: ((bergeracButton state) ifTrue: ('Bergerac')
+					ifFalse: ((avignonButton state) ifTrue: ('Avignon')
+					ifFalse: ((saintetienneButton state) ifTrue: ('Saint-Étienne')
+					ifFalse: ('Inconnue'))))));
+			yourself.
+			
+	string := STONJSON toString: jsonRef.
+
+stream := fichier writeStream
+			nextPutAll: string.
+stream close."
+			
+			
+	
+]
+
+{ #category : #accessing }
+Constructors_Page >> list [
+
+	Transcript show: 'Placeholder';cr.
+	self listModel.
+]
+
+{ #category : #'as yet unclassified' }
+Constructors_Page >> listButton [
+	^ listButton
+]
+
+{ #category : #accessing }
+Constructors_Page >> listButton: anObject [.
+	listButton := anObject.
+]
+
+{ #category : #accessing }
+Constructors_Page >> listModel [
+	Liste_Marque open.
+
 ]
 
 { #category : #accessing }
@@ -376,8 +435,10 @@ Constructors_Page >> saintetienneButton [
 { #category : #submit }
 Constructors_Page >> submit [
 	
+	self json.
 	self submitOut.
 	self writeProduit.
+	
 	
 	"Restauration du modèle de base"
 	self model: workingModel.
@@ -423,12 +484,13 @@ Constructors_Page >> taux_margeNumberImput: anObject [
 
 { #category : #accessing }
 Constructors_Page >> totalCalculImput [
- ^ totalCalculImput.
+ ^ (((self nombre_unitesNumberImput number) * (1 + (self taux_margeNumberImput number) * (self cout_uniteNumberImput number))) printString)
 ]
 
 { #category : #accessing }
 Constructors_Page >> totalCalculImput: anObject [
 	totalCalculImput := anObject.
+
 ]
 
 { #category : #accessing }
@@ -445,9 +507,11 @@ Constructors_Page >> workingModel: anObject [
 { #category : #writing }
 Constructors_Page >> writeProduit [
 
-	|nouveau|
+	|nouveau|	
 	
 	nouveau := Produit new.
+	
+	liste items: { '515' }.
 	
 	nouveau reference: (self reference_produitTextInput text).
 	nouveau lot: (self numero_lotNumberImput text).
@@ -464,7 +528,9 @@ Constructors_Page >> writeProduit [
 					ifFalse: ((avignonButton state) ifTrue: ('Avignon')
 					ifFalse: ((saintetienneButton state) ifTrue: ('Saint-Étienne')
 					ifFalse: ('Inconnue')))))).
-					
+
 	stock contient: nouveau.
+	
 	Transcript show: ('Produit pris en compte !'); cr.
+
 ]

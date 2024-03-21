@@ -77,7 +77,7 @@ Produit >> nom [
 
 { #category : #accessing }
 Produit >> nom: anText [
-	nom:=anText .
+	nom:=anText.
 ]
 
 { #category : #accessing }

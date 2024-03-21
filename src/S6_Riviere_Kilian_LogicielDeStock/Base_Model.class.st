@@ -47,6 +47,8 @@ Base_Model >> elements [
 		'marque' -> self marque.
 		'nombre_unites_lot' -> self nombre_unites.
 		'cout_une_unite' -> self cout_unite.
+		'taux_marge' -> self taux_marge.
+		'total' -> self total.
 		
 		'items' -> self selectedItems.
 		}
@@ -80,7 +82,7 @@ Base_Model >> initialize [
 { #category : #accessing }
 Base_Model >> items [
 
-	^ #('item 1' 'item 2' 'item 3' 'item 4' 'item 5')
+	^ #('item 1' 'item 2' 'item 3' 'item 4' 'item 5' 'item 6')
 ]
 
 { #category : #accessing }
@@ -170,7 +172,7 @@ Base_Model >> taux_marge: anObject [
 
 { #category : #accessing }
 Base_Model >> total [
-	^	((nombre_unites) * (cout_unite) * (1 + taux_marge))
+	^ ((cout_unite) + (cout_unite * taux_marge)) * nombre_unites 
 ]
 
 { #category : #accessing }
