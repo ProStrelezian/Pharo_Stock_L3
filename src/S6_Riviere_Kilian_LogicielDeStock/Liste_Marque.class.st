@@ -2,13 +2,15 @@ Class {
 	#name : #'Liste_Marque',
 	#superclass : #SpListPresenter,
 	#instVars : [
-		'liste_marque',
 		'liste_nomproduit',
 		'luButton',
 		'princeButton',
 		'bonnemamanButton',
 		'nutellaButton',
-		'bjorgButton'
+		'bjorgButton',
+		'workingModel',
+		'marqueButtons',
+		'choixButton'
 	],
 	#category : #'S6_Riviere_Kilian_LogicielDeStock'
 }
@@ -33,6 +35,13 @@ Liste_Marque >> bjorgButton: anObject [
 	bjorgButton := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+Liste_Marque >> bjorgProduit [
+
+	Transcript show: ('Vous avez selectionné la liste des produit de la marque Bjorg');cr.
+	self liste_nomproduit items: { 'Saussice' }.
+]
+
 { #category : #accessing }
 Liste_Marque >> bonnemamanButton [
 
@@ -43,6 +52,22 @@ Liste_Marque >> bonnemamanButton [
 Liste_Marque >> bonnemamanButton: anObject [
 
 	bonnemamanButton := anObject
+]
+
+{ #category : #'as yet unclassified' }
+Liste_Marque >> bonnemamanProduit [
+
+	Transcript show: ('Vous avez selectionné la liste des produit de la marque Bonne Maman');cr.
+	self liste_nomproduit items: { 'Saussicebejbfjk' }.
+]
+
+{ #category : #initialization }
+Liste_Marque >> connectPresenters [
+	self luButton action: [ self luProduit ].
+	self princeButton action: [ self princeProduit ].
+	self bonnemamanButton action: [ self bonnemamanProduit ].
+	self nutellaButton action: [ self nutellaProduit ].
+	self bjorgButton action: [ self bjorgProduit ]
 ]
 
 { #category : #layout }
@@ -75,8 +100,15 @@ Liste_Marque >> initializePresenters [
 	bonnemamanButton := self newToggleButton label: 'Bonne Maman'.
 	nutellaButton := self newToggleButton label: 'Nutella'.
 	bjorgButton := self newToggleButton label: 'Bjorg'.
-		
+	luButton associatedToggleButtons: ({princeButton}, {bonnemamanButton}, {nutellaButton}, {bjorgButton}).
+		marqueButtons := Dictionary newFrom: {
+		(#LU -> luButton).
+		(#Prince  -> princeButton).
+		(#BonneMaman -> bonnemamanButton).
+		(#Nutella  -> nutellaButton).
+		(#Bjorg -> bjorgButton)}.
 	
+	choixButton := self newButton label: 'Filtrer les produits'.
 
 ]
 
@@ -85,19 +117,7 @@ Liste_Marque >> initializeWindow: aWindowPresenter [
 	"Cela permet d'ouvrir la fenêtre avec des options pré-définie"
 	aWindowPresenter
 		initialExtent: 500@600.
-	aWindowPresenter title: 'Historique'.
-]
-
-{ #category : #accessing }
-Liste_Marque >> liste_marque [
-
-	^ liste_marque
-]
-
-{ #category : #accessing }
-Liste_Marque >> liste_marque: anObject [
-
-	liste_marque := anObject
+	aWindowPresenter title: 'Catalogue de produit'.
 ]
 
 { #category : #accessing }
@@ -124,6 +144,13 @@ Liste_Marque >> luButton: anObject [
 	luButton := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+Liste_Marque >> luProduit [
+
+	Transcript show: ('Vous avez selectionné la liste des produit de la marque LU');cr.
+	self liste_nomproduit items: { 'Saussice' }.
+]
+
 { #category : #accessing }
 Liste_Marque >> nutellaButton [
 
@@ -136,6 +163,13 @@ Liste_Marque >> nutellaButton: anObject [
 	nutellaButton := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+Liste_Marque >> nutellaProduit [
+		
+	Transcript show: ('Vous avez selectionné la liste des produit de la marque Nutella');cr.
+	self liste_nomproduit items: { 'Saussice' }.
+]
+
 { #category : #accessing }
 Liste_Marque >> princeButton [
 
@@ -146,4 +180,20 @@ Liste_Marque >> princeButton [
 Liste_Marque >> princeButton: anObject [
 
 	princeButton := anObject
+]
+
+{ #category : #'as yet unclassified' }
+Liste_Marque >> princeProduit [
+	Transcript show: ('Vous avez selectionné la liste des produit de la marque Prince');cr.
+	self liste_nomproduit items: { 'Saussice' }.
+]
+
+{ #category : #accessing }
+Liste_Marque >> workingModel [
+	^ workingModel.
+]
+
+{ #category : #accessing }
+Liste_Marque >> workingModel: anObject [
+	workingModel := anObject.
 ]

@@ -331,7 +331,7 @@ stream close."
 { #category : #accessing }
 Constructors_Page >> list [
 
-	Transcript show: 'Placeholder';cr.
+	Transcript show: 'La liste a été ouverte !';cr.
 	self listModel.
 ]
 
