@@ -3,7 +3,12 @@ Class {
 	#superclass : #SpListPresenter,
 	#instVars : [
 		'liste_marque',
-		'liste_nomproduit'
+		'liste_nomproduit',
+		'luButton',
+		'princeButton',
+		'bonnemamanButton',
+		'nutellaButton',
+		'bjorgButton'
 	],
 	#category : #'S6_Riviere_Kilian_LogicielDeStock'
 }
@@ -16,13 +21,41 @@ Liste_Marque class >> open [
 		yourself
 ]
 
+{ #category : #accessing }
+Liste_Marque >> bjorgButton [
+
+	^ bjorgButton
+]
+
+{ #category : #accessing }
+Liste_Marque >> bjorgButton: anObject [
+
+	bjorgButton := anObject
+]
+
+{ #category : #accessing }
+Liste_Marque >> bonnemamanButton [
+
+	^ bonnemamanButton
+]
+
+{ #category : #accessing }
+Liste_Marque >> bonnemamanButton: anObject [
+
+	bonnemamanButton := anObject
+]
+
 { #category : #layout }
 Liste_Marque >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
-			add: (SpBoxLayout newTopToBottom 
+			add: (SpBoxLayout newVertical 
 					add: 'Marque' expand: false;
-					add: liste_marque);
+					add: luButton;
+					add: princeButton;
+					add: bonnemamanButton;
+					add: nutellaButton;
+					add: bjorgButton);
 			add: (SpBoxLayout newTopToBottom 
 					add: '' expand: false;
 					add: '');
@@ -34,11 +67,17 @@ Liste_Marque >> defaultLayout [
 
 { #category : #initialization }
 Liste_Marque >> initializePresenters [
-	
-	liste_marque := self newList.
+
 	liste_nomproduit := self newList.
+		
+	luButton := self newToggleButton label: 'LU'.
+	princeButton := self newToggleButton label: 'Prince'.
+	bonnemamanButton := self newToggleButton label: 'Bonne Maman'.
+	nutellaButton := self newToggleButton label: 'Nutella'.
+	bjorgButton := self newToggleButton label: 'Bjorg'.
+		
 	
-	liste_marque items: #( 'LU' 'Prince' 'Bonne Maman' 'Nutella' 'Bjorg')
+
 ]
 
 { #category : #initialization }
@@ -71,4 +110,40 @@ Liste_Marque >> liste_nomproduit [
 Liste_Marque >> liste_nomproduit: anObject [
 
 	liste_nomproduit := anObject
+]
+
+{ #category : #accessing }
+Liste_Marque >> luButton [
+
+	^ luButton
+]
+
+{ #category : #accessing }
+Liste_Marque >> luButton: anObject [
+
+	luButton := anObject
+]
+
+{ #category : #accessing }
+Liste_Marque >> nutellaButton [
+
+	^ nutellaButton
+]
+
+{ #category : #accessing }
+Liste_Marque >> nutellaButton: anObject [
+
+	nutellaButton := anObject
+]
+
+{ #category : #accessing }
+Liste_Marque >> princeButton [
+
+	^ princeButton
+]
+
+{ #category : #accessing }
+Liste_Marque >> princeButton: anObject [
+
+	princeButton := anObject
 ]
