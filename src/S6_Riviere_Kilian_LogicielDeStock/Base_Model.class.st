@@ -39,6 +39,7 @@ Base_Model >> date_livraison: anObject [
 
 { #category : #'tests - printing' }
 Base_Model >> elements [
+	"Cette méthode catalogue toutes les variables selon un nom de code"
 	^ { 
 		'reference_produit' -> self reference_produit.
 		'numero_lot' -> self numero_lot.
@@ -72,16 +73,11 @@ Base_Model >> initialize [
 	taux_marge := 0.
 	site := #Annecy.
 	selectedItems := { self items at: 2. self items at: 3. self items at: 4 }.
-	
-	txt := 'database.txt' asFileReference.
-	txt exists.
-	txt extension.
-	
 ]
 
 { #category : #accessing }
 Base_Model >> items [
-
+   "Cette méthode classe les items qui vont être des bouton dans le formulaire (ex : Submit (Ajouter))"
 	^ #('item 1' 'item 2' 'item 3' 'item 4' 'item 5' 'item 6')
 ]
 
@@ -157,6 +153,7 @@ Base_Model >> site: anObject [
 
 { #category : #'as yet unclassified' }
 Base_Model >> sites [
+	"Cette méthode catalogue les sites"
 	^ #(Annecy Genève Bergerac Avignon Saint-Étienne)
 ]
 
@@ -172,7 +169,7 @@ Base_Model >> taux_marge: anObject [
 
 { #category : #accessing }
 Base_Model >> total [
-	^ ((cout_unite) + (cout_unite * taux_marge)) * nombre_unites 
+	^ total
 ]
 
 { #category : #accessing }

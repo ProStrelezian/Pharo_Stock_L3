@@ -17,8 +17,10 @@ Stock >> contient: unProduit [
 
 { #category : #initialization }
 Stock >> initialize [
+
+		"Cette classe permet de créer un stock qui permet de créer une base de donnée"
 		contient := OrderedCollection new.
-		numero := (2**24) atRandom.
+		numero := (2**24) atRandom. "Génération d'un numéro aléatoire"
 ]
 
 { #category : #accessing }
@@ -39,16 +41,16 @@ Stock >> unAnnuairedeProduit [
 { #category : #writing }
 Stock >> writeDB [
 
-|x s n |
+|x s n|
 
+"Première façon de créer un database en .json"
 Transcript show: ('La méthode WriteDB a été activé !'); cr.
-"Transcript show: (self numero)."
 
-n := ('data/database_', (self numero) printString,'_',((Date today) year) printString,'_',((Date today) monthIndex) printString,'_',((Date today) dayOfMonth) printString, '.json').
+"Chemin d'accès du fichier"
+n := ('data/basic_database_', (self numero) printString,'_',((Date today) year) printString,'_',((Date today) monthIndex) printString,'_',((Date today) dayOfMonth) printString, '.json').
 
-"n := ('data/database_', (self numero) printString,'_',((Date today) year) printString,'_',((Date today) monthIndex) printString,'_',((Date today) dayOfMonth) printString, '.csv')."
+"Transcript show: ((n) printstring)"
 
-"Transcript show: n printString."
 
 x := (n) asFileReference. "Création du fichier"
 
@@ -56,15 +58,13 @@ x exists. "Vérifier si ça existe"
 
 x extension.
 
-s := x writeStream. "Créer un write Stream pour pouvoir écrirededans"
+s := x writeStream. "Créer un write Stream pour pouvoir écrire dedans"
 
+"Boucle d'une création d'une ligne"
 s nextPutAll: '['.
 (self unAnnuairedeProduit ) do: [ :chaqueProduit | 
 	s nextPutAll: '{"Référence": "',(chaqueProduit reference), '"',',"Numéro de lot": "',(chaqueProduit lot), '"',',"Nom du produit": "',(chaqueProduit nom), '"',',"Date de livraison": "',(chaqueProduit livraison) printString, '"',',"Marque": "',(chaqueProduit marque), '"',',"Nombre unités": "',(chaqueProduit nb_unites), '"',',"Coût unitaire": "',(chaqueProduit cout), '"',',"Taux de marque": "',(chaqueProduit taux_marge), '"',',"Total": "',(chaqueProduit total), '"',',"Site de production": "', (chaqueProduit site), '"},'].
 s nextPutAll:']'.
-
-"b := x readStream.
-b next."
 
 
 s close. "Fermeture"
@@ -72,18 +72,22 @@ s close. "Fermeture"
 
 { #category : #'as yet unclassified' }
 Stock >> writejson [
-	|jsonRef stream fichier string n z|
+	|jsonRef stream fichier string n|
 	
-	n := ('data/json_database_', (self numero) printString,'_',((Date today) year) printString,'_',((Date today) monthIndex) printString,'_',((Date today) dayOfMonth) printString, '.json').
+"Première façon de créer un database en .json"
+Transcript show: ('La méthode WriteJSON a été activé !'); cr.
+
+"Chemin d'accès du fichier"
+	n := ('data/advanced_database_', (self numero) printString,'_',((Date today) year) printString,'_',((Date today) monthIndex) printString,'_',((Date today) dayOfMonth) printString, '.json').
 	
-	fichier := (n) asFileReference.
+	fichier := (n) asFileReference. "Création du fichier"
 	
-	fichier exists.
+	fichier exists. "Voir si elle existe."
 	fichier extension.
 	
-	stream := fichier writeStream.
+	stream := fichier writeStream. "Créer un write Stream pour pouvoir écrire dedans"
 	
-	
+"Création d'un dictionnaire pour intégrer dans un document le stock"
 (self unAnnuairedeProduit)	do: [ :chaqueProduit |
 		jsonRef := Dictionary new
 		  at: 'Date' put: ((Date today) asString);
@@ -103,12 +107,7 @@ Stock >> writejson [
 		stream nextPutAll: ',';cr.] .
 		
 		"jsonRef inspect."
-		
-		"z = List new
-			addItems: (self lot) printString;
-			open;
-			yourself."
-		
-		
+
+"Fermeture du fichier"		
 stream close.
 ]

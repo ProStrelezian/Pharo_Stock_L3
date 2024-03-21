@@ -1,5 +1,5 @@
 Class {
-	#name : #'Constructors_Page',
+	#name : #'Formulaire_Entree_Stock',
 	#superclass : #SpPresenterWithModel,
 	#instVars : [
 		'workingModel',
@@ -23,55 +23,54 @@ Class {
 		'saintetienneButton',
 		'siteButtons',
 		'stock',
-		'listButton',
-		'liste'
+		'listButton'
 	],
 	#category : #'S6_Riviere_Kilian_LogicielDeStock'
 }
 
 { #category : #'instance creation' }
-Constructors_Page class >> open [
+Formulaire_Entree_Stock class >> open [
 	(self on: Base_Model new) open.
 	Transcript clear.
 	Transcript show: 'Ouverture du formulaire.'; cr.
 ]
 
 { #category : #accessing }
-Constructors_Page >> annecyButton [
+Formulaire_Entree_Stock >> annecyButton [
 	^annecyButton.
 ]
 
 { #category : #accessing }
-Constructors_Page >> avignonButton [
+Formulaire_Entree_Stock >> avignonButton [
 	^avignonButton
 ]
 
 { #category : #accessing }
-Constructors_Page >> bergeracButton [
+Formulaire_Entree_Stock >> bergeracButton [
 	^bergeracButton
 ]
 
 { #category : #actions }
-Constructors_Page >> cancel [
+Formulaire_Entree_Stock >> cancel [
 	"Action pour fermer le formulaire"
 	
 	self cancelModel.
 ]
 
 { #category : #accessing }
-Constructors_Page >> cancelButton [
+Formulaire_Entree_Stock >> cancelButton [
 
 	^ cancelButton
 ]
 
-{ #category : #accessing }
-Constructors_Page >> cancelButton: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> cancelButton: anObject [
 
 	cancelButton := anObject.
 ]
 
 { #category : #'as yet unclassified' }
-Constructors_Page >> cancelModel [
+Formulaire_Entree_Stock >> cancelModel [
 	
 	self window close.
 	Transcript show: 'Fermeture de la fenêtre en cours...'; cr.
@@ -79,37 +78,37 @@ Constructors_Page >> cancelModel [
 ]
 
 { #category : #initialization }
-Constructors_Page >> connectPresenters [
-	"ajout des différents boutons spéciaux pour les actions du formulaire"
+Formulaire_Entree_Stock >> connectPresenters [
+	"Ajout des différents boutons spéciaux pour les actions du formulaire"
 	self submitButton action: [ self submit ].
 	self restoreButton action: [ self restore ].
 	self cancelButton action: [ self cancel ].
-	self listButton action: [ self list ]
+	self listButton action: [ self list ].
 ]
 
 { #category : #accessing }
-Constructors_Page >> cout_uniteNumberImput [
+Formulaire_Entree_Stock >> cout_uniteNumberImput [
 	^cout_uniteNumberImput.
 ]
 
-{ #category : #accessing }
-Constructors_Page >> cout_uniteNumberImput: anObject [.
+{ #category : #modifying }
+Formulaire_Entree_Stock >> cout_uniteNumberImput: anObject [.
 	cout_uniteNumberImput := anObject.
 ]
 
 { #category : #accessing }
-Constructors_Page >> date_livraisonDateImput [
+Formulaire_Entree_Stock >> date_livraisonDateImput [
 	^ date_livraisonDateImput.
 
 ]
 
-{ #category : #accessing }
-Constructors_Page >> date_livraisonDateImput: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> date_livraisonDateImput: anObject [
 	date_livraisonDateImput := anObject.
 ]
 
 { #category : #layout }
-Constructors_Page >> defaultLayout [
+Formulaire_Entree_Stock >> defaultLayout [
 	"ajout des différentes cases pour chaque renseignement"
 	^ SpBoxLayout newTopToBottom 
 		add: (SpGridLayout build: [ :builder |
@@ -122,7 +121,8 @@ Constructors_Page >> defaultLayout [
 					add: 'Nombre d unités du lot'; add: nombre_unitesNumberImput; nextRow;
 					add: 'Coût unitaire'; add: cout_uniteNumberImput; nextRow;
 					add: 'Taux de marge'; add: taux_margeNumberImput; nextRow;
-					"add: 'Total'; add: totalCalculImput ; nextRow;"
+					"add: 'Total'; add: totalCalculImput ; nextRow; (Pas intégré car elle ne s'actualise pas"
+					
 		add: 'Site de production:'; add: (SpBoxLayout newVertical 
 					add: annecyButton;
 					add: geneveButton;
@@ -145,7 +145,7 @@ Constructors_Page >> defaultLayout [
 ]
 
 { #category : #'model updates' }
-Constructors_Page >> fillFormWithWorkingModel [
+Formulaire_Entree_Stock >> fillFormWithWorkingModel [
 	"Modèle enrengistrée du jeu d'avant (ou si premier jeu, du modèle de base)"
 	| aModel |
 	aModel := self workingModel.
@@ -157,15 +157,15 @@ Constructors_Page >> fillFormWithWorkingModel [
 	self nombre_unitesNumberImput text: aModel nombre_unites asString.
 	self cout_uniteNumberImput text: aModel cout_unite asString.
 	self taux_margeNumberImput text: aModel taux_marge asString.
-	"self totalCalculImput: aModel total asString."
+	"self totalCalculImput: aModel total asString. (pas intégré car impossible de l'actualisé"
 	(siteButtons at: aModel site) state: true.
 	"self itemsInput selectItems: self workingModel selectedItems"
 ]
 
 { #category : #'model updates' }
-Constructors_Page >> fillModelWithFormContent [
+Formulaire_Entree_Stock >> fillModelWithFormContent [
 	
-	"formatage des types de données"
+	"Formatage des types de données"
 	self workingModel
 		reference_produit: self reference_produitTextInput text;
 		numero_lot: self numero_lotNumberImput number;
@@ -183,12 +183,12 @@ Constructors_Page >> fillModelWithFormContent [
 ]
 
 { #category : #accessing }
-Constructors_Page >> geneveButton [
+Formulaire_Entree_Stock >> geneveButton [
 	^geneveButton.
 ]
 
 { #category : #initialization }
-Constructors_Page >> initializePresenters [
+Formulaire_Entree_Stock >> initializePresenters [
 	"instalation des différentes limitations selon les boutons"
 
 	
@@ -259,110 +259,84 @@ Constructors_Page >> initializePresenters [
 		(#Avignon  -> avignonButton).
 		(#SaintÉtienne -> saintetienneButton)}.
  
-
+	"Bouton d'actions"
 	submitButton  := self newButton label: 'Ajouter'.
 	restoreButton := self newButton label: 'Réinitialiser'.
 	cancelButton := self newButton label: 'Fermer & Annuler'.
-	listButton := self newButton label: 'Afficher la liste'.
+	listButton := self newButton label: 'Catalogue'.
 	
-	stock := Stock new.
-	Transcript show: 'La liste a été crée !'
+	self initializeStock.
+	
+	
+	
+	
 
 
 ]
 
 { #category : #initialization }
-Constructors_Page >> initializeWindow: aWindowPresenter [
+Formulaire_Entree_Stock >> initializeStock [
+	
+	"Initalisation de la classe Stock"
+	stock := Stock new.
+	Transcript show: 'La liste a été crée !'
+
+]
+
+{ #category : #initialization }
+Formulaire_Entree_Stock >> initializeWindow: aWindowPresenter [
 	"Cela permet d'ouvrir la fenêtre avec des options pré-définie"
 	aWindowPresenter
 		initialExtent: 650@600.
-	aWindowPresenter title: 'Formulaire de stock'.
+	aWindowPresenter title: 'Entreprise LesGâteauxEnchantées - Formulaire de Stock'.
 ]
 
 { #category : #accessing }
-Constructors_Page >> itemsInput [
+Formulaire_Entree_Stock >> itemsInput [
 	^ itemsInput
 ]
 
-{ #category : #accessing }
-Constructors_Page >> itemsInput: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> itemsInput: anObject [
 	itemsInput := anObject.
 ]
 
-{ #category : #'private - accessing' }
-Constructors_Page >> json [
-	"|jsonRef stream fichier string |
-	
-	fichier := 'test.json' asFileReference.
-	
-	fichier exists. ""Vérifier si ça existe""
-
-	fichier extension.
-	
-	jsonRef := Dictionary new
-			at: 'Date' put: (Date today) asString;
-			at: 'Référence' put: (self reference_produitTextInput text) asString;
-			at: 'Lot' put: (self numero_lotNumberImput text) asString;
-			at: 'Nom' put: (self nom_produitTextImput text) asString;
-			at: 'Date de livraison' put: (self date_livraisonDateImput date) asString;
-			at: 'Marque' put: (self marqueTextImput text) asString;
-			at: 'Nombre d unités' put: (self nombre_unitesNumberImput text)asString;
-			at: 'Coût unitaire' put: (self cout_uniteNumberImput text)asString;
-			at: 'Taux de marge' put: (self taux_margeNumberImput text)asString;
-			at: 'Total' put: (self totalCalculImput)asString;
-			at: 'Site' put: ((annecyButton state) ifTrue: ('Annecy')
-					ifFalse: ((geneveButton state) ifTrue: ('Genève')
-					ifFalse: ((bergeracButton state) ifTrue: ('Bergerac')
-					ifFalse: ((avignonButton state) ifTrue: ('Avignon')
-					ifFalse: ((saintetienneButton state) ifTrue: ('Saint-Étienne')
-					ifFalse: ('Inconnue'))))));
-			yourself.
-			
-	string := STONJSON toString: jsonRef.
-
-stream := fichier writeStream
-			nextPutAll: string.
-stream close."
-			
-			
-	
-]
-
-{ #category : #accessing }
-Constructors_Page >> list [
+{ #category : #transitions }
+Formulaire_Entree_Stock >> list [
 
 	Transcript show: 'La liste a été ouverte !';cr.
 	self listModel.
 ]
 
 { #category : #'as yet unclassified' }
-Constructors_Page >> listButton [
+Formulaire_Entree_Stock >> listButton [
 	^ listButton
 ]
 
 { #category : #accessing }
-Constructors_Page >> listButton: anObject [.
+Formulaire_Entree_Stock >> listButton: anObject [.
 	listButton := anObject.
 ]
 
 { #category : #accessing }
-Constructors_Page >> listModel [
+Formulaire_Entree_Stock >> listModel [
+	"Cette méthode permet d'accéder au catalogue"
 	Liste_Marque open.
 
 ]
 
 { #category : #accessing }
-Constructors_Page >> marqueTextImput [
+Formulaire_Entree_Stock >> marqueTextImput [
 	^ marqueTextImput.
 ]
 
-{ #category : #accessing }
-Constructors_Page >> marqueTextImput: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> marqueTextImput: anObject [
 	marqueTextImput := anObject. 
 ]
 
 { #category : #initialization }
-Constructors_Page >> modelChanged [
+Formulaire_Entree_Stock >> modelChanged [
 
 	workingModel := self model copy.
 
@@ -371,72 +345,71 @@ Constructors_Page >> modelChanged [
 ]
 
 { #category : #accessing }
-Constructors_Page >> nom_produitTextImput [
+Formulaire_Entree_Stock >> nom_produitTextImput [
 	^ nom_produitTextImput.
 ]
 
-{ #category : #accessing }
-Constructors_Page >> nom_produitTextImput: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> nom_produitTextImput: anObject [
 	nom_produitTextImput := anObject.
 ]
 
 { #category : #accessing }
-Constructors_Page >> nombre_unitesNumberImput [
+Formulaire_Entree_Stock >> nombre_unitesNumberImput [
 	^ nombre_unitesNumberImput 
 ]
 
-{ #category : #accessing }
-Constructors_Page >> nombre_unitesNumberImput: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> nombre_unitesNumberImput: anObject [
 	nombre_unitesNumberImput := anObject.
 ]
 
 { #category : #accessing }
-Constructors_Page >> numero_lotNumberImput [
+Formulaire_Entree_Stock >> numero_lotNumberImput [
 	^ numero_lotNumberImput.
 ]
 
-{ #category : #accessing }
-Constructors_Page >> numero_lotNumberInput: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> numero_lotNumberInput: anObject [
 	numero_lotNumberImput := anObject.
 ]
 
 { #category : #accessing }
-Constructors_Page >> reference_produitTextInput [
+Formulaire_Entree_Stock >> reference_produitTextInput [
 	^ reference_produitTextInput
 ]
 
-{ #category : #accessing }
-Constructors_Page >> reference_produitTextInput: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> reference_produitTextInput: anObject [
 	reference_produitTextInput := anObject.
 ]
 
 { #category : #'window management' }
-Constructors_Page >> restore [
+Formulaire_Entree_Stock >> restore [
 	"Action pour remettre le formulaire à l'état d'origine"
 	self modelChanged.
 	Transcript show: '> Le formulaire a été réinitialisé !'; cr;cr.
 ]
 
 { #category : #accessing }
-Constructors_Page >> restoreButton [
+Formulaire_Entree_Stock >> restoreButton [
 	^ restoreButton
 ]
 
-{ #category : #accessing }
-Constructors_Page >> restoreButton: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> restoreButton: anObject [
 	restoreButton := anObject.
 ]
 
 { #category : #accessing }
-Constructors_Page >> saintetienneButton [
+Formulaire_Entree_Stock >> saintetienneButton [
 	^saintetienneButton
 ]
 
 { #category : #submit }
-Constructors_Page >> submit [
+Formulaire_Entree_Stock >> submit [
 	
-	self json.
-	self submitOut.
+	"Méthode qui lance la production d'une classe Produit"
 	self writeProduit.
 	
 	
@@ -446,6 +419,7 @@ Constructors_Page >> submit [
 	
 	self fillModelWithFormContent.
 	
+	Transcript show: ('> La demande a été soumis !');cr.
 	
 	
 
@@ -454,65 +428,57 @@ Constructors_Page >> submit [
 ]
 
 { #category : #accessing }
-Constructors_Page >> submitButton [
+Formulaire_Entree_Stock >> submitButton [
 	^ submitButton.
 ]
 
-{ #category : #accessing }
-Constructors_Page >> submitButton: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> submitButton: anObject [
 	submitButton := anObject.
 ]
 
-{ #category : #'as yet unclassified' }
-Constructors_Page >> submitOut [
-	Transcript show: '> La demande a été soumis !'; cr.
-	
-	Transcript show: 'Les infos données sont : '; cr.
-	Transcript show: ((self nombre_unitesNumberImput number) * (1 + (self taux_margeNumberImput  number) * (self cout_uniteNumberImput number)));cr.
-	
-]
-
 { #category : #accessing }
-Constructors_Page >> taux_margeNumberImput [
+Formulaire_Entree_Stock >> taux_margeNumberImput [
 	^ taux_margeNumberImput 
 ]
 
-{ #category : #accessing }
-Constructors_Page >> taux_margeNumberImput: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> taux_margeNumberImput: anObject [
 	taux_margeNumberImput := anObject.
 ]
 
 { #category : #accessing }
-Constructors_Page >> totalCalculImput [
+Formulaire_Entree_Stock >> totalCalculImput [
  ^ (((self nombre_unitesNumberImput number) * (1 + (self taux_margeNumberImput number) * (self cout_uniteNumberImput number))) printString)
 ]
 
-{ #category : #accessing }
-Constructors_Page >> totalCalculImput: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> totalCalculImput: anObject [
 	totalCalculImput := anObject.
 
 ]
 
 { #category : #accessing }
-Constructors_Page >> workingModel [
+Formulaire_Entree_Stock >> workingModel [
 	^ workingModel
 ]
 
-{ #category : #accessing }
-Constructors_Page >> workingModel: anObject [
+{ #category : #modifying }
+Formulaire_Entree_Stock >> workingModel: anObject [
 	workingModel := anObject
 	
 ]
 
 { #category : #writing }
-Constructors_Page >> writeProduit [
+Formulaire_Entree_Stock >> writeProduit [
+
+	"Processus de création d'un produit"
 
 	|nouveau|	
 	
 	nouveau := Produit new.
 	
-	liste items: { '515' }.
-	
+	"Rentrage des information que l'on a rentré sur le formulaire"
 	nouveau reference: (self reference_produitTextInput text).
 	nouveau lot: (self numero_lotNumberImput text).
 	nouveau nom: (self nom_produitTextImput text).
@@ -528,7 +494,8 @@ Constructors_Page >> writeProduit [
 					ifFalse: ((avignonButton state) ifTrue: ('Avignon')
 					ifFalse: ((saintetienneButton state) ifTrue: ('Saint-Étienne')
 					ifFalse: ('Inconnue')))))).
-
+	
+	"Entrée dans le stock de produit avec toutes les informations"
 	stock contient: nouveau.
 	
 	Transcript show: ('Produit pris en compte !'); cr.

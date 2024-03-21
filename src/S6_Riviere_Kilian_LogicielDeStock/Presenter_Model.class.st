@@ -35,7 +35,7 @@ Presenter_Model >> initializePresenters [
 	form := self newPresenter 
 		layout: (SpBoxLayout newTopToBottom
 			add: 'form' expand: false;
-			add: (self instantiate: Constructors_Page on: self announcingObject);
+			add: (self instantiate: Formulaire_Entree_Stock on: self announcingObject);
 			yourself);
 		yourself.
 

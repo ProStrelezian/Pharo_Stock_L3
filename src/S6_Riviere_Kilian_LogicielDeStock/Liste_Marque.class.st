@@ -38,8 +38,18 @@ Liste_Marque >> bjorgButton: anObject [
 { #category : #'as yet unclassified' }
 Liste_Marque >> bjorgProduit [
 
+	|fichier|
+	
+	fichier := 'produit/bjorg.txt' asFileReference.
+	
+	fichier exists.
+	fichier extension.
+	
+
 	Transcript show: ('Vous avez selectionné la liste des produit de la marque Bjorg');cr.
-	self liste_nomproduit items: { 'Saussice' }.
+	self liste_nomproduit items: (fichier readStreamDo: [ :in |
+  Array streamContents: [ :out |
+    [ in atEnd ] whileFalse: [ out nextPut: in nextLine ] ] ]).
 ]
 
 { #category : #accessing }
@@ -57,8 +67,18 @@ Liste_Marque >> bonnemamanButton: anObject [
 { #category : #'as yet unclassified' }
 Liste_Marque >> bonnemamanProduit [
 
+	|fichier|
+	
+	fichier := 'produit/bonnemaman.txt' asFileReference.
+	
+	fichier exists.
+	fichier extension.
+	
+
 	Transcript show: ('Vous avez selectionné la liste des produit de la marque Bonne Maman');cr.
-	self liste_nomproduit items: { 'Saussicebejbfjk' }.
+	self liste_nomproduit items: (fichier readStreamDo: [ :in |
+  Array streamContents: [ :out |
+    [ in atEnd ] whileFalse: [ out nextPut: in nextLine ] ] ]).
 ]
 
 { #category : #initialization }
@@ -147,8 +167,18 @@ Liste_Marque >> luButton: anObject [
 { #category : #'as yet unclassified' }
 Liste_Marque >> luProduit [
 
+	|fichier|
+	
+	fichier := 'produit/lu.txt' asFileReference.
+	
+	fichier exists.
+	fichier extension.
+	
+
 	Transcript show: ('Vous avez selectionné la liste des produit de la marque LU');cr.
-	self liste_nomproduit items: { 'Saussice' }.
+	self liste_nomproduit items: (fichier readStreamDo: [ :in |
+  Array streamContents: [ :out |
+    [ in atEnd ] whileFalse: [ out nextPut: in nextLine ] ] ]).
 ]
 
 { #category : #accessing }
@@ -166,8 +196,18 @@ Liste_Marque >> nutellaButton: anObject [
 { #category : #'as yet unclassified' }
 Liste_Marque >> nutellaProduit [
 		
+	|fichier|
+	
+	fichier := 'produit/nutella.txt' asFileReference.
+	
+	fichier exists.
+	fichier extension.
+	
+
 	Transcript show: ('Vous avez selectionné la liste des produit de la marque Nutella');cr.
-	self liste_nomproduit items: { 'Saussice' }.
+	self liste_nomproduit items: (fichier readStreamDo: [ :in |
+  Array streamContents: [ :out |
+    [ in atEnd ] whileFalse: [ out nextPut: in nextLine ] ] ]).
 ]
 
 { #category : #accessing }
@@ -184,8 +224,19 @@ Liste_Marque >> princeButton: anObject [
 
 { #category : #'as yet unclassified' }
 Liste_Marque >> princeProduit [
+	
+	|fichier|
+	
+	fichier := 'produit/prince.txt' asFileReference.
+	
+	fichier exists.
+	fichier extension.
+	
+
 	Transcript show: ('Vous avez selectionné la liste des produit de la marque Prince');cr.
-	self liste_nomproduit items: { 'Saussice' }.
+	self liste_nomproduit items: (fichier readStreamDo: [ :in |
+  Array streamContents: [ :out |
+    [ in atEnd ] whileFalse: [ out nextPut: in nextLine ] ] ]).
 ]
 
 { #category : #accessing }

@@ -28,6 +28,8 @@ Produit >> cout: anText [
 
 { #category : #initialization }
 Produit >> initialize [ 
+
+	"Cette classe permet la création d'un produit pour être stockée dans un stock"
 ]
 
 { #category : #accessing }
